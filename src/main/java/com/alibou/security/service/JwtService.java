@@ -2,22 +2,37 @@ package com.alibou.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
     private static final String SECRET_KEY = "4f951911d14044651adc60a4ab8fd8e8a32d4bf9e3d4516170c6b1d4cbe0f9d7";
     public String extractUsername(String jwtToken) {
-        return null;
+        return extractClaim(jwtToken, Claims::getSubject);
     }
     public <T> T extractClaim(String token, Function<Claims,T> claimsResolver){
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    public String generateToken(Map<String,Object> extractClaims, UserDetails userDetails){
+        return Jwts
+                .builder()
+                .setClaims(extractClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     private Claims extractAllClaims(String token){
