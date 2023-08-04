@@ -1,7 +1,7 @@
 spring:
   datasource:
     username: Legends
-    url: jdbc:mysql://localhost:3306/jwt_security
+    url: jdbc:mysql://localhost:3306/jwt_security?createDatabaseIfNotExist=true
     password: Wilianborges4191$
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
