@@ -1,5 +1,6 @@
 package com.alibou.security.controller;
 
+import com.alibou.security.dto.request.RegistrationRequest;
 import com.alibou.security.dto.response.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
